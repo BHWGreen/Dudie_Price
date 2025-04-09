@@ -49,7 +49,7 @@
     }
     .card {
       display: flex;
-      flex-direction: column;
+      flex-direction: row; /* 가로로 배치 */
       background: white;
       border-radius: 12px;
       overflow: hidden;
@@ -65,6 +65,7 @@
       height: auto;
       object-fit: cover;
       flex-shrink: 0;
+      max-width: 150px; /* 이미지 최대 너비를 설정 */
     }
     .card-content {
       padding: 1rem;
@@ -73,7 +74,7 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      align-items: center;
+      align-items: flex-start; /* 왼쪽 정렬 */
       position: relative;
     }
     .product-name {
@@ -116,7 +117,7 @@
 
     @media screen and (max-width: 768px) {
       .card {
-        flex-direction: column;
+        flex-direction: column; /* 작은 화면에서는 세로로 배치 */
         align-items: center;
       }
       .card img {
