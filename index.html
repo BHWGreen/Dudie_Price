@@ -42,30 +42,24 @@
       margin-left: 2px;
       margin-top: 2px;
     }
-    .card-container {
-      display: flex;
-      flex-wrap: wrap; /* 줄 바꿈 가능 */
-      justify-content: space-around; /* 카드들이 자동으로 배치되도록 */
-    }
     .card {
       display: flex;
-      flex-direction: row; /* 가로로 배치 */
+      flex-direction: row;
       background: white;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       width: 100%;
-      max-width: 300px; /* 카드의 최대 너비를 300px로 설정 */
-      margin: 10px; /* 카드 간 간격 추가 */
-      flex: 1 1 300px; /* 각 카드가 300px로 시작하지만 화면 크기에 따라 늘어날 수 있게 설정 */
+      max-width: 600px;
       position: relative;
+      flex-wrap: wrap;
     }
     .card img {
       width: 100%;
+      max-width: 300px;
       height: auto;
       object-fit: cover;
       flex-shrink: 0;
-      max-width: 150px; /* 이미지 최대 너비를 설정 */
     }
     .card-content {
       padding: 1rem;
@@ -74,7 +68,7 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      align-items: flex-start; /* 왼쪽 정렬 */
+      align-items: center;
       position: relative;
     }
     .product-name {
@@ -117,7 +111,7 @@
 
     @media screen and (max-width: 768px) {
       .card {
-        flex-direction: column; /* 작은 화면에서는 세로로 배치 */
+        flex-direction: column;
         align-items: center;
       }
       .card img {
@@ -142,98 +136,95 @@
     </div>
   </div>
 
-  <div class="card-container"> <!-- 카드들이 들어갈 컨테이너 추가 -->
-    <script>
-      const formatPrice = (price) => {
-        return parseInt(price).toLocaleString('ko-KR') + '원';
+  <script>
+    const formatPrice = (price) => {
+      return parseInt(price).toLocaleString('ko-KR') + '원';
+    }
+
+    const products = [
+      {
+        name: "콜런 키링",
+        price: "4000",
+        material: "혼합",
+        size: "1/2/3/4/5/6/7",
+        color: "",
+        image: "https://i.imgur.com/bFui6lx.jpg"
+      },
+      {
+        name: "마롱 키링",
+        price: "6000",
+        material: "혼합",
+        size: "",
+        color: "고양핑크 / 고양아이 / 토끼핑크 / 토끼아이",
+        image: "https://i.imgur.com/2PN1FLb.jpg"
+      },
+      {
+        name: "오아캡",
+        price: "9000",
+        material: "면혼방",
+        size: "FREE (50~54cm)",
+        color: "블랙 / 그레이 / 퍼플 / 베이지",
+        image: "https://i.imgur.com/aIVhqB1.jpg"
+      },
+      {
+        name: "치렝 레깅스 <무발>",
+        price: "9000",
+        material: "면혼방",
+        size: "M - 2세 ~ 4세, S - 0세 ~ 2세",
+        color: "아이보리 / 핑크 / 블루",
+        image: "https://i.imgur.com/rixAHxe.jpg"
+      },
+      {
+        name: "믹스 스마일 4종",
+        price: "5000",
+        material: "면혼방",
+        size: "FREE (190~260mm)",
+        color: "",
+        image: "https://i.imgur.com/NzTN3A6.jpg"
+      },
+      {
+        name: "바람 5종 세트",
+        price: "5000",
+        material: "면혼방",
+        size: "XXL 220~240mm, XL 190~220mm, L 150~180mm, M 130~150mm",
+        color: "",
+        image: "https://i.imgur.com/IIDNApt.jpg"
+      }
+    ];
+
+    products.forEach(product => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const img = document.createElement('img');
+      img.src = product.image;
+      img.alt = product.name;
+      card.appendChild(img);
+
+      const content = document.createElement('div');
+      content.className = 'card-content';
+
+      const name = document.createElement('div');
+      name.className = 'product-name';
+      name.textContent = product.name;
+      content.appendChild(name);
+
+      const info = document.createElement('div');
+      info.className = 'info';
+      info.innerHTML += `<div><strong>단가</strong> ${formatPrice(product.price)}</div>`;
+      info.innerHTML += `<div><strong>소재</strong> ${product.material}</div>`;
+      if (product.color) {
+        info.innerHTML += `<div><strong>색상</strong> ${product.color}</div>`;
+      }
+      if (product.size) {
+        info.innerHTML += `<div><strong>사이즈</strong> ${product.size}</div>`;
       }
 
-      const products = [
-        {
-          name: "콜런 키링",
-          price: "4000",
-          material: "혼합",
-          size: "1/2/3/4/5/6/7",
-          color: "",
-          image: "https://i.imgur.com/bFui6lx.jpg"
-        },
-        {
-          name: "마롱 키링",
-          price: "6000",
-          material: "혼합",
-          size: "",
-          color: "고양핑크 / 고양아이 / 토끼핑크 / 토끼아이",
-          image: "https://i.imgur.com/2PN1FLb.jpg"
-        },
-        {
-          name: "오아캡",
-          price: "9000",
-          material: "면혼방",
-          size: "FREE (50~54cm)",
-          color: "블랙 / 그레이 / 퍼플 / 베이지",
-          image: "https://i.imgur.com/aIVhqB1.jpg"
-        },
-        {
-          name: "치렝 레깅스 <무발>",
-          price: "9000",
-          material: "면혼방",
-          size: "M - 2세 ~ 4세, S - 0세 ~ 2세",
-          color: "아이보리 / 핑크 / 블루",
-          image: "https://i.imgur.com/rixAHxe.jpg"
-        },
-        {
-          name: "믹스 스마일 4종",
-          price: "5000",
-          material: "면혼방",
-          size: "FREE (190~260mm)",
-          color: "",
-          image: "https://i.imgur.com/NzTN3A6.jpg"
-        },
-        {
-          name: "바람 5종 세트",
-          price: "5000",
-          material: "면혼방",
-          size: "XXL 220~240mm, XL 190~220mm, L 150~180mm, M 130~150mm",
-          color: "",
-          image: "https://i.imgur.com/IIDNApt.jpg"
-        }
-      ];
-
-      products.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const img = document.createElement('img');
-        img.src = product.image;
-        img.alt = product.name;
-        card.appendChild(img);
-
-        const content = document.createElement('div');
-        content.className = 'card-content';
-
-        const name = document.createElement('div');
-        name.className = 'product-name';
-        name.textContent = product.name;
-        content.appendChild(name);
-
-        const info = document.createElement('div');
-        info.className = 'info';
-        info.innerHTML += `<div><strong>단가</strong> ${formatPrice(product.price)}</div>`;
-        info.innerHTML += `<div><strong>소재</strong> ${product.material}</div>`;
-        if (product.color) {
-          info.innerHTML += `<div><strong>색상</strong> ${product.color}</div>`;
-        }
-        if (product.size) {
-          info.innerHTML += `<div><strong>사이즈</strong> ${product.size}</div>`;
-        }
-
-        content.appendChild(info);
-        card.appendChild(content);
-
-        document.querySelector('.card-container').appendChild(card); // .card-container에 카드 추가
-      });
-    </script>
-  </div>
+      content.appendChild(info);
+      card.appendChild(content);
+      document.body.appendChild(card);
+    });
+  </script>
 
 </body>
 </html>
