@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 단가표</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .card {
+      display: flex;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 600px;
+    }
+    .card img {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 1rem;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .card-content div {
+      margin-bottom: 6px;
+    }
+    .card-content strong {
+      display: inline-block;
+      width: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    const products = [
+      {
+        name: "샘플 상품 1",
+        price: "2,500원",
+        material: "면 100%",
+        size: "30x30cm",
+        color: "아이보리",
+        image: "cropped_product.jpg"
+      },
+      {
+        name: "샘플 상품 2",
+        price: "3,000원",
+        material: "면 100%",
+        size: "M / L / XL",
+        image: "cropped_product.jpg"
+      },
+      {
+        name: "샘플 상품 3",
+        price: "2,000원",
+        material: "린넨",
+        color: "블랙",
+        image: "cropped_product.jpg"
+      }
+    ];
+
+    products.forEach(product => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const img = document.createElement('img');
+      img.src = product.image;
+      img.alt = product.name;
+      card.appendChild(img);
+
+      const content = document.createElement('div');
+      content.className = 'card-content';
+
+      content.innerHTML += `<div><strong>상품명:</strong> ${product.name}</div>`;
+      content.innerHTML += `<div><strong>단가:</strong> ${product.price}</div>`;
+      content.innerHTML += `<div><strong>소재:</strong> ${product.material}</div>`;
+      if (product.size) {
+        content.innerHTML += `<div><strong>사이즈:</strong> ${product.size}</div>`;
+      }
+      if (product.color) {
+        content.innerHTML += `<div><strong>색상:</strong> ${product.color}</div>`;
+      }
+
+      card.appendChild(content);
+      document.body.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>
