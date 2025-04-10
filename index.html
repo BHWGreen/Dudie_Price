@@ -59,7 +59,7 @@
 
     .card {
       display: flex;
-      flex-direction: row;
+      flex-direction: row; /* 기본값: 가로 배치 */
       background: white;
       border-radius: 12px;
       overflow: hidden;
@@ -124,29 +124,10 @@
       color: #444;
     }
 
-    /* 세로 정렬 및 중앙 배치를 위한 스타일 */
-    @media screen and (max-width: 800px), (orientation: portrait) {
+    /* 반응형: 모바일에서 세로 배치 */
+    @media screen and (max-width: 800px) {
       .card {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
-
-      .card img {
-        width: 100%;
-        height: auto;
-      }
-
-      .card-content {
-        align-items: center;
-        text-align: center;
-      }
-    }
-
-    @media screen and (min-width: 800px) and (orientation: landscape) {
-      .card {
-        flex-direction: column;
+        flex-direction: column; /* 세로 배치 */
         align-items: center;
         justify-content: center;
         text-align: center;
@@ -208,7 +189,7 @@
       color: #000;
     }
 
-    /* 사이즈 버튼 */
+    /* 사이즈 보기 버튼 */
     .floating-size-btn {
       position: fixed;
       bottom: 20px;
@@ -292,6 +273,30 @@
         size: "FREE (50~54cm)",
         color: "블랙 / 그레이 / 퍼플 / 베이지",
         image: "https://i.imgur.com/aIVhqB1.jpg"
+      },
+      {
+        name: "치렝 레깅스 <무발>",
+        price: "9000",
+        material: "면혼방",
+        size: "M - 2세 ~ 4세, S - 0세 ~ 2세",
+        color: "아이보리 / 핑크 / 블루",
+        image: "https://i.imgur.com/rixAHxe.jpg"
+      },
+      {
+        name: "믹스 스마일 4종",
+        price: "5000",
+        material: "면혼방",
+        size: "FREE (190~260mm)",
+        color: "",
+        image: "https://i.imgur.com/NzTN3A6.jpg"
+      },
+      {
+        name: "바람 5종 세트",
+        price: "5000",
+        material: "면혼방",
+        size: "XXL 220~240mm, XL 190~220mm, L 150~180mm, M 130~150mm",
+        color: "",
+        image: "https://i.imgur.com/IIDNApt.jpg"
       }
     ];
 
@@ -332,12 +337,11 @@
 
     const popup = document.getElementById("popup");
 
-    // 팝업 토글
+    // 팝업 열기/닫기 기능
     function togglePopup() {
       popup.classList.toggle("open");
     }
 
-    // 팝업 닫기
     function closePopup() {
       popup.classList.remove("open");
     }
