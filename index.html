@@ -127,11 +127,12 @@
     }
 
     /* 반응형 처리 */
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 800px), (orientation: portrait) {
       .card {
-        flex-direction: column; /* 800px 이하에서 이미지와 설명을 세로로 배치 */
+        flex-direction: column; /* 세로 배치 */
         width: 100%; /* 한 행에 1개 */
-        align-items: center; /* PC에서 세로 배치 시 이미지와 내용 중앙 정렬 */
+        align-items: center; /* 이미지와 내용 모두 중앙 정렬 */
+        text-align: center;
       }
 
       .card img {
@@ -145,13 +146,20 @@
       }
     }
 
-    @media screen and (min-width: 800px) {
+    @media screen and (min-width: 800px) and (orientation: landscape) {
       .card {
-        flex-direction: row; /* 800px 이상에서는 다시 가로 배치 */
+        flex-direction: row; /* 가로 배치 */
+        justify-content: center; /* 모든 내용 중앙 정렬 */
+        align-items: center;
       }
 
       .card img {
-        margin: 0 auto; /* 이미지가 가로 중앙으로 배치 */
+        margin: 0 auto; /* 이미지가 가로 중앙 정렬 */
+      }
+
+      .card-content {
+        align-items: center; /* 텍스트도 중앙 정렬 */
+        text-align: center;
       }
     }
 
