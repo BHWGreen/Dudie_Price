@@ -52,7 +52,7 @@
     }
     .card {
       display: flex;
-      flex-direction: row; /* 이미지와 설명을 가로 배치 */
+      flex-direction: row; /* 기본적으로 이미지와 설명을 가로로 배치 */
       background: white;
       border-radius: 12px;
       overflow: hidden;
@@ -116,7 +116,16 @@
     /* 반응형 처리 */
     @media screen and (max-width: 768px) {
       .card {
-        width: 100%; /* 작은 화면에서는 한 행에 1개 */
+        flex-direction: column; /* 모바일에서는 이미지 위, 설명 아래로 배치 */
+        width: 100%; /* 한 행에 1개 */
+      }
+      .card img {
+        width: 100%; /* 이미지를 전체 너비로 */
+        height: auto; /* 이미지 비율 유지 */
+      }
+      .card-content {
+        align-items: center; /* 텍스트 가운데 정렬 */
+        text-align: center;
       }
     }
   </style>
@@ -185,7 +194,7 @@
         name: "바람 5종 세트",
         price: "5000",
         material: "면혼방",
-        size: "XXL, XL, L, M",
+        size: "XXL 220~240mm, XL 190~220mm, L 150~180mm, M 130~150mm",
         color: "",
         image: "https://i.imgur.com/IIDNApt.jpg"
       }
