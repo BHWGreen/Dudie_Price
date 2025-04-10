@@ -52,28 +52,30 @@
     }
     .card {
       display: flex;
-      flex-direction: column;
+      flex-direction: row; /* 가로 배치 */
       background: white;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      width: calc(25% - 20px); /* 4개 한 행 */
-      min-width: 200px;
-      max-width: 300px;
+      width: 100%;
+      max-width: 600px; /* 최대 카드 너비 */
       position: relative;
+      flex-wrap: nowrap;
     }
     .card img {
-      width: 100%;
+      width: 50%; /* 이미지가 카드의 절반 차지 */
       height: auto;
       object-fit: cover;
+      flex-shrink: 0;
     }
     .card-content {
       padding: 1rem;
       font-size: 14px;
+      flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      align-items: center;
+      align-items: flex-start; /* 좌측 정렬 */
       position: relative;
     }
     .product-name {
@@ -84,13 +86,9 @@
       padding: 10px 16px;
       text-align: center;
       border-radius: 12px;
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      right: 12px;
+      margin-bottom: 12px;
     }
     .info {
-      margin-top: 70px;
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -115,19 +113,17 @@
     }
 
     /* 반응형 처리 */
-    @media screen and (max-width: 1200px) {
-      .card {
-        width: calc(33.33% - 20px); /* 3개 한 행 */
-      }
-    }
     @media screen and (max-width: 768px) {
       .card {
-        width: calc(50% - 20px); /* 2개 한 행 */
+        flex-direction: column; /* 작은 화면에서는 세로 배치 */
+        align-items: center;
       }
-    }
-    @media screen and (max-width: 480px) {
-      .card {
-        width: 100%; /* 1개 한 행 */
+      .card img {
+        width: 100%; /* 이미지를 전체 너비로 */
+      }
+      .card-content {
+        align-items: center; /* 가운데 정렬 */
+        text-align: center;
       }
     }
   </style>
@@ -143,7 +139,7 @@
   </div>
 
   <div class="container" id="product-container">
-    <!-- JavaScript로 상품 카드 추가 -->
+    <!-- 상품 카드가 여기에 추가됩니다 -->
   </div>
 
   <script>
