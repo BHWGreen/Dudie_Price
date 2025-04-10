@@ -127,10 +127,11 @@
     }
 
     /* 반응형 처리 */
-    @media screen and (max-width: 1000px) {
+    @media screen and (max-width: 800px) {
       .card {
-        flex-direction: column; /* 1000px 이하에서 이미지와 설명을 세로로 배치 */
+        flex-direction: column; /* 800px 이하에서 이미지와 설명을 세로로 배치 */
         width: 100%; /* 한 행에 1개 */
+        align-items: center; /* PC에서 세로 배치 시 이미지와 내용 중앙 정렬 */
       }
 
       .card img {
@@ -144,9 +145,13 @@
       }
     }
 
-    @media screen and (min-width: 1000px) {
+    @media screen and (min-width: 800px) {
       .card {
-        flex-direction: row; /* 1000px 이상에서는 다시 가로 배치 */
+        flex-direction: row; /* 800px 이상에서는 다시 가로 배치 */
+      }
+
+      .card img {
+        margin: 0 auto; /* 이미지가 가로 중앙으로 배치 */
       }
     }
 
