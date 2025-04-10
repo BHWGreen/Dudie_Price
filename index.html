@@ -127,9 +127,9 @@
     }
 
     /* 반응형 처리 */
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1000px) {
       .card {
-        flex-direction: column; /* 모바일에서는 이미지 위, 설명 아래로 배치 */
+        flex-direction: column; /* 1000px 이하에서 이미지와 설명을 세로로 배치 */
         width: 100%; /* 한 행에 1개 */
       }
 
@@ -269,7 +269,7 @@
   </div>
 
   <!-- 사이즈 보기 버튼 -->
-  <button class="floating-size-btn" onclick="openPopup()">Size</button>
+  <button class="floating-size-btn">Size</button>
 
   <script>
     const products = [
@@ -359,16 +359,15 @@
     });
 
     const popup = document.getElementById("popup");
+    const sizeButton = document.querySelector(".floating-size-btn");
 
-    // 팝업 열기
-    function openPopup() {
-      popup.classList.add("open");
+    // 팝업 열기/닫기를 토글
+    function togglePopup() {
+      popup.classList.toggle("open");
     }
 
-    // 팝업 닫기
-    function closePopup() {
-      popup.classList.remove("open");
-    }
+    // "Size" 버튼 클릭 이벤트
+    sizeButton.addEventListener("click", togglePopup);
   </script>
 </body>
 </html>
