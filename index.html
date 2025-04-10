@@ -44,6 +44,240 @@
     }
     .container {
       display: flex;
+      flex-wrap: wrap; /* 카드들을 여러 줄로 배치 */
+      justify-content: space-between; /* 카드 간격을 균등하게 */
+      gap: 20px; /* 카드 간격 */
+      width: 100%;
+      max-width: 1200px;
+    }
+    .card {
+      display: flex;
+      flex-direction: row; /* 이미지와 설명을 가로 배치 */
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: calc(33.33% - 20px); /* 기본적으로 한 행에 3개 */
+      min-width: 300px; /* 최소 너비 */
+      max-width: 400px; /* 최대 너비 */
+      position: relative;
+      flex-wrap: nowrap;
+    }
+    .card img {
+      width: 50%; /* 이미지가 카드의 절반 차지 */
+      height: auto;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .card-content {
+      padding: 1rem;
+      font-size: 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      position: relative;
+    }
+    .product-name {
+      background: #fce4ec;
+      color: #333;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 10px 16px;
+      text-align: center;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 15px;
+      line-height: 1.5;
+      width: 100%;
+    }
+    .info div {
+      background: #f9f9f9;
+      padding: 6px 10px;
+      border-radius: 8px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: left;
+      word-break: keep-all;
+      white-space: normal;
+    }
+    .info strong {
+      display: inline-block;
+      width: 60px;
+      color: #444;
+    }
+
+    /* 반응형 처리 */
+    @media screen and (max-width: 1024px) {
+      .card {
+        width: calc(50% - 20px); /* 한 행에 2개 */
+      }
+    }
+    @media screen and (max-width: 768px) {
+      .card {
+        width: 100%; /* 한 행에 1개 */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <img src="https://i.imgur.com/2GRPCTA.jpg" alt="DUDIE 마크">
+    <div class="header-title">
+      <span class="main">DUDIE 신상 단가표</span>
+      <span class="sub">( 카톡문의 / dudie )</span>
+    </div>
+  </div>
+
+  <div class="container" id="product-container">
+    <!-- 상품 카드가 여기에 추가됩니다 -->
+  </div>
+
+  <script>
+    const formatPrice = (price) => {
+      return parseInt(price).toLocaleString('ko-KR') + '원';
+    };
+
+    const products = [
+      {
+        name: "콜런 키링",
+        price: "4000",
+        material: "혼합",
+        size: "1/2/3/4/5/6/7",
+        color: "",
+        image: "https://i.imgur.com/bFui6lx.jpg"
+      },
+      {
+        name: "마롱 키링",
+        price: "6000",
+        material: "혼합",
+        size: "",
+        color: "고양핑크 / 고양아이 / 토끼핑크 / 토끼아이",
+        image: "https://i.imgur.com/2PN1FLb.jpg"
+      },
+      {
+        name: "오아캡",
+        price: "9000",
+        material: "면혼방",
+        size: "FREE (50~54cm)",
+        color: "블랙 / 그레이 / 퍼플 / 베이지",
+        image: "https://i.imgur.com/aIVhqB1.jpg"
+      },
+      {
+        name: "치렝 레깅스 <무발>",
+        price: "9000",
+        material: "면혼방",
+        size: "M - 2세 ~ 4세, S - 0세 ~ 2세",
+        color: "아이보리 / 핑크 / 블루",
+        image: "https://i.imgur.com/rixAHxe.jpg"
+      },
+      {
+        name: "믹스 스마일 4종",
+        price: "5000",
+        material: "면혼방",
+        size: "FREE (190~260mm)",
+        color: "",
+        image: "https://i.imgur.com/NzTN3A6.jpg"
+      },
+      {
+        name: "바람 5종 세트",
+        price: "5000",
+        material: "면혼방",
+        size: "XXL 220~240mm, XL 190~220mm, L 150~180mm, M 130~150mm",
+        color: "",
+        image: "https://i.imgur.com/IIDNApt.jpg"
+      }
+    ];
+
+    const container = document.getElementById("product-container");
+    products.forEach(product => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const img = document.createElement('img');
+      img.src = product.image;
+      img.alt = product.name;
+      card.appendChild(img);
+
+      const content = document.createElement('div');
+      content.className = 'card-content';
+
+      const name = document.createElement('div');
+      name.className = 'product-name';
+      name.textContent = product.name;
+      content.appendChild(name);
+
+      const info = document.createElement('div');
+      info.className = 'info';
+      info.innerHTML += `<div><strong>단가</strong> ${formatPrice(product.price)}</div>`;
+      info.innerHTML += `<div><strong>소재</strong> ${product.material}</div>`;
+      if (product.color) {
+        info.innerHTML += `<div><strong>색상</strong> ${product.color}</div>`;
+      }
+      if (product.size) {
+        info.innerHTML += `<div><strong>사이즈</strong> ${product.size}</div>`;
+      }
+
+      content.appendChild(info);
+      card.appendChild(content);
+      container.appendChild(card);
+    });
+  </script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품 단가표</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: #ffffff;
+      padding: 10px 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .header img {
+      height: 36px;
+    }
+    .header-title {
+      color: #333;
+      display: flex;
+      flex-direction: column;
+    }
+    .header-title .main {
+      font-size: 36px;
+      font-weight: bold;
+    }
+    .header-title .sub {
+      font-size: 18px;
+      margin-left: 2px;
+      margin-top: 2px;
+    }
+    .container {
+      display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
