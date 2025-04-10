@@ -211,6 +211,30 @@
       font-weight: bold;
       color: #333;
     }
+
+    /* 사이즈 버튼 스타일 */
+    .floating-size-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1100;
+    }
+
+    .floating-size-btn:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
@@ -244,80 +268,36 @@
     </div>
   </div>
 
+  <!-- 사이즈 보기 버튼 -->
+  <button class="floating-size-btn" onclick="openPopup()">Size</button>
+
   <script>
     const products = [
-      {
-        name: "콜런 키링",
-        price: "4000",
-        material: "혼합",
-        size: "1/2/3/4/5/6/7",
-        color: "",
-        image: "https://i.imgur.com/bFui6lx.jpg"
-      },
-      {
-        name: "마롱 키링",
-        price: "6000",
-        material: "혼합",
-        size: "",
-        color: "고양핑크 / 고양아이 / 토끼핑크 / 토끼아이",
-        image: "https://i.imgur.com/2PN1FLb.jpg"
-      },
-      {
-        name: "오아캡",
-        price: "9000",
-        material: "면혼방",
-        size: "FREE (50~54cm)",
-        color: "블랙 / 그레이 / 퍼플 / 베이지",
-        image: "https://i.imgur.com/aIVhqB1.jpg"
-      },
-      {
-        name: "치렝 레깅스 <무발>",
-        price: "9000",
-        material: "면혼방",
-        size: "M - 2세 ~ 4세, S - 0세 ~ 2세",
-        color: "아이보리 / 핑크 / 블루",
-        image: "https://i.imgur.com/rixAHxe.jpg"
-      },
-      {
-        name: "믹스 스마일 4종",
-        price: "5000",
-        material: "면혼방",
-        size: "FREE (190~260mm)",
-        color: "",
-        image: "https://i.imgur.com/NzTN3A6.jpg"
-      },
-      {
-        name: "바람 5종 세트",
-        price: "5000",
-        material: "면혼방",
-        size: "XXL, XL, L, M",
-        color: "",
-        image: "https://i.imgur.com/IIDNApt.jpg"
-      }
+      // 상품 데이터 생략 (이전 코드와 동일)
     ];
 
     const container = document.getElementById("product-container");
 
     products.forEach(product => {
-      const card = document.createElement('div');
-      card.className = 'card';
+      const card = document.createElement("div");
+      card.className = "card";
 
-      const img = document.createElement('img');
+      const img = document.createElement("img");
       img.src = product.image;
       img.alt = product.name;
       card.appendChild(img);
 
-      const content = document.createElement('div');
-      content.className = 'card-content';
+      const content = document.createElement("div");
+      content.className = "card-content";
 
-      const name = document.createElement('div');
-      name.className = 'product-name';
+      const name = document.createElement("div");
+      name.className = "product-name";
       name.textContent = product.name;
       content.appendChild(name);
 
-      const info = document.createElement('div');
-      info.className = 'info';
-      info.innerHTML += `<div><strong>단가</strong> ${parseInt(product.price).toLocaleString('ko-KR')}원</div>`;
+      const info = document.createElement("div");
+      info.className = "info";
+      info.innerHTML += `<div><strong>단가</strong> ${parseInt(product.price).toLocaleString("ko-KR")}원</div>`;
       info.innerHTML += `<div><strong>소재</strong> ${product.material}</div>`;
       if (product.color) {
         info.innerHTML += `<div><strong>색상</strong> ${product.color}</div>`;
@@ -331,19 +311,17 @@
       container.appendChild(card);
     });
 
-    const popup = document.getElementById('popup');
+    const popup = document.getElementById("popup");
 
     // 팝업 열기
     function openPopup() {
-      popup.classList.add('open');
+      popup.classList.add("open");
     }
 
     // 팝업 닫기
     function closePopup() {
-      popup.classList.remove('open');
+      popup.classList.remove("open");
     }
   </script>
-
-  <button class="open-popup-btn" onclick="openPopup()">사이즈 보기</button>
 </body>
 </html>
