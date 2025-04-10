@@ -45,7 +45,7 @@
     .container {
       display: flex;
       flex-wrap: wrap; /* 카드가 여러 줄로 배치되도록 설정 */
-      justify-content: space-between; /* 카드 간 간격 균등하게 */
+      justify-content: space-between; /* 카드 간격 균등하게 */
       gap: 20px; /* 카드 간격 */
       width: 100%;
       max-width: 1200px;
@@ -57,9 +57,9 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      width: calc(33.33% - 20px); /* 기본적으로 한 행에 3개 */
+      width: calc(50% - 20px); /* 한 행에 2개 */
       min-width: 300px; /* 카드 최소 너비 */
-      max-width: 400px; /* 카드 최대 너비 */
+      max-width: 600px; /* 카드 최대 너비 */
       position: relative;
       flex-wrap: nowrap;
     }
@@ -114,14 +114,9 @@
     }
 
     /* 반응형 처리 */
-    @media screen and (max-width: 1024px) {
-      .card {
-        width: calc(50% - 20px); /* 한 행에 2개 */
-      }
-    }
     @media screen and (max-width: 768px) {
       .card {
-        width: 100%; /* 한 행에 1개 */
+        width: 100%; /* 작은 화면에서는 한 행에 1개 */
       }
     }
   </style>
