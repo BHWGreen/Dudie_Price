@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>상품 단가표</title>
+  <title>상품 단가표 및 팝업</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -162,6 +162,75 @@
         text-align: center;
       }
     }
+
+    /* 팝업창 스타일 */
+    .popup {
+      position: fixed;
+      top: 0;
+      right: -400px; /* 팝업이 처음에는 화면 밖에 위치 */
+      width: 300px;
+      height: 100%;
+      background-color: #ffffff;
+      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+      overflow-y: auto;
+      transition: right 0.3s ease-in-out; /* 슬라이딩 애니메이션 */
+      z-index: 1000;
+    }
+
+    .popup.open {
+      right: 0; /* 팝업이 열렸을 때 화면 안으로 들어옴 */
+    }
+
+    .popup-header {
+      padding: 15px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .popup-content {
+      padding: 15px;
+    }
+
+    .close-popup-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .close-popup-btn:hover {
+      color: #000;
+    }
+
+    /* 사이즈 버튼 */
+    .floating-size-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1100;
+    }
+
+    .floating-size-btn:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
@@ -178,6 +247,26 @@
     <!-- 상품 카드가 여기에 추가됩니다 -->
   </div>
 
+  <!-- 팝업창 -->
+  <div class="popup" id="popup">
+    <div class="popup-header">
+      양말 사이즈 안내
+      <button class="close-popup-btn" onclick="closePopup()">×</button>
+    </div>
+    <div class="popup-content">
+      <p>양말 사이즈에 대한 정보를 확인하세요:</p>
+      <ul>
+        <li><strong>XXL:</strong> 220mm ~ 240mm</li>
+        <li><strong>XL:</strong> 190mm ~ 220mm</li>
+        <li><strong>L:</strong> 150mm ~ 180mm</li>
+        <li><strong>M:</strong> 130mm ~ 150mm</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 사이즈 보기 버튼 -->
+  <button class="floating-size-btn" onclick="togglePopup()">Size</button>
+
   <script>
     const products = [
       {
@@ -187,6 +276,22 @@
         size: "1/2/3/4/5/6/7",
         color: "",
         image: "https://i.imgur.com/bFui6lx.jpg"
+      },
+      {
+        name: "마롱 키링",
+        price: "6000",
+        material: "혼합",
+        size: "",
+        color: "고양핑크 / 고양아이 / 토끼핑크 / 토끼아이",
+        image: "https://i.imgur.com/2PN1FLb.jpg"
+      },
+      {
+        name: "오아캡",
+        price: "9000",
+        material: "면혼방",
+        size: "FREE (50~54cm)",
+        color: "블랙 / 그레이 / 퍼플 / 베이지",
+        image: "https://i.imgur.com/aIVhqB1.jpg"
       }
     ];
 
@@ -224,6 +329,18 @@
       card.appendChild(content);
       container.appendChild(card);
     });
+
+    const popup = document.getElementById("popup");
+
+    // 팝업 토글
+    function togglePopup() {
+      popup.classList.toggle("open");
+    }
+
+    // 팝업 닫기
+    function closePopup() {
+      popup.classList.remove("open");
+    }
   </script>
 </body>
 </html>
