@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>상품 단가표 및 팝업</title>
+  <title>상품 단가표 및 주문표</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -40,52 +40,76 @@
     .header-title .main {
       font-size: 36px;
       font-weight: bold;
-    }
+     text-align: center;   
+ }
 
     .header-title .sub {
       font-size: 18px;
-      margin-left: 2px;
-      margin-top: 2px;
+     text-align: center;
     }
+
+    .tabs, .sub-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab, .sub-tab {
+      background: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease;
+    }
+
+    .tab.active, .sub-tab.active {
+      background: #4CAF50;
+      color: white;
+      font-weight: bold;
+    }
+
+    .sub-tabs {
+      margin-top: -10px;
+    }
+
 
     .container {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: center;
       gap: 20px;
       width: 100%;
       max-width: 1200px;
     }
 
     .card {
-      display: flex;
-      flex-direction: row; /* 기본값: 가로 배치 */
+      display: none; /* 기본적으로 숨김 */
+      flex-direction: row;
       background: white;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       width: calc(50% - 20px);
-      min-width: 300px;
       max-width: 600px;
       position: relative;
     }
 
     .card img {
-      width: 50%;
+      width: 70%;
       height: auto;
       object-fit: cover;
-      flex-shrink: 0;
     }
 
     .card-content {
       padding: 1rem;
       font-size: 14px;
-      flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      position: relative;
+      gap: 10px;
+      flex: 1;
     }
 
     .product-name {
@@ -96,38 +120,255 @@
       padding: 10px 16px;
       text-align: center;
       border-radius: 12px;
-      margin-bottom: 12px;
     }
 
-    .info {
+    .product-price {
+      font-size: 16px;
+      font-weight: bold;
+      color: #555;
+      text-align: center;
+      margin: 8px 0;
+    }
+
+    .new-sticker {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #FF5722;
+      color: white;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: bold;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .dropdown {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      font-size: 15px;
-      line-height: 1.5;
-      width: 100%;
+      gap: 10px;
+      margin: 10px 0;
     }
 
-    .info div {
-      background: #f9f9f9;
-      padding: 6px 10px;
+    .dropdown select {
+      padding: 5px;
       border-radius: 8px;
-      box-sizing: border-box;
-      text-align: left;
-      word-break: keep-all;
-      white-space: normal;
+      border: 1px solid #ddd;
+      font-size: 14px;
     }
 
-    .info strong {
-      display: inline-block;
-      width: 60px;
-      color: #444;
+    .quantity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    /* 반응형: 모바일에서 세로 배치 */
+    .quantity button {
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    .quantity button:disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
+    }
+
+    .quantity input {
+      width: 50px;
+      text-align: center;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 5px;
+      appearance: none;
+      -moz-appearance: textfield;
+    }
+
+    .quantity input::-webkit-inner-spin-button,
+    .quantity input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .add-to-order {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .add-to-order:hover {
+      background-color: #45a049;
+    }
+
+    .popup {
+      position: fixed;
+      top: 0;
+      right: -500px;
+      width: 450px;
+      height: 100%;
+      background: white;
+      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+      overflow-y: auto;
+      transition: right 0.3s ease-in-out;
+      z-index: 1000;
+      padding: 15px;
+    }
+
+    .popup.open {
+      right: 0;
+    }
+
+    .popup-header {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #4CAF50;
+      text-align: center;
+    }
+
+    .order-list {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      color: #333;
+      margin-top: 0px;
+    }
+
+    .order-list th,
+    .order-list td {
+      text-align: center;
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .order-list th {
+      background-color: #f8f9fa;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #4CAF50;
+    }
+
+    .order-list tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .order-list tr:hover {
+      background-color: #e8f5e9;
+    }
+
+    .order-list td button {
+      background-color: #FF5722;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 10px;
+      cursor: pointer;
+      padding: 5px 6.5px;
+    }
+
+    .order-list td button:hover {
+      background-color: #E64A19;
+    }
+
+    .divider {
+      border-top: 1px solid #ddd;
+      margin: 0px 0;
+    }
+
+    .popup-content {
+      font-size: 18px;
+     font-weight: bold; /* 폰트 굵기 */ 
+      color: #333;
+      margin: 5px 0;
+      text-align: center;
+    }
+
+    .popup-buttons {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1101;
+    }
+
+    .popup-button {
+      width: 50px;
+      height: 50px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .popup-button.size {
+      background-color: #FF5722;
+    }
+
+    .popup-button.size:hover {
+      background-color: #E64A19;
+    }
+
+    .popup-button.order:hover {
+      background-color: #45a049;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .action-button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      gap: 20px;
+    }
+
+    .action-button:hover {
+      background-color: #45a049;
+    }
+
+.total-summary-wrapper {
+  display: flex;
+  justify-content: center; /* 오른쪽 정렬 */
+  align-items: center; /* 수직 방향 중앙 정렬 */
+  margin: 0 0; /* 위아래 여백 추가 */
+}
+
+#total-summary {
+  font-size: 18px;
+  font-weight: bold;
+}
+
     @media screen and (max-width: 800px) {
       .card {
-        flex-direction: column; /* 세로 배치 */
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
@@ -142,210 +383,536 @@
         align-items: center;
         text-align: center;
       }
-    }
 
-    /* 팝업창 스타일 */
-    .popup {
-      position: fixed;
-      top: 0;
-      right: -400px; /* 팝업이 처음에는 화면 밖에 위치 */
-      width: 300px;
-      height: 100%;
-      background-color: #ffffff;
-      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-      overflow-y: auto;
-      transition: right 0.3s ease-in-out; /* 슬라이딩 애니메이션 */
-      z-index: 1000;
-    }
-
-    .popup.open {
-      right: 0; /* 팝업이 열렸을 때 화면 안으로 들어옴 */
-    }
-
-    .popup-header {
-      padding: 15px;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 18px;
-      text-align: center;
-    }
-
-    .popup-content {
-      padding: 15px;
-    }
-
-    .close-popup-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      font-size: 18px;
-      cursor: pointer;
-      color: #333;
-    }
-
-    .close-popup-btn:hover {
-      color: #000;
-    }
-
-    /* 사이즈 보기 버튼 */
-    .floating-size-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 50px;
-      height: 50px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      font-size: 14px;
-      font-weight: bold;
-      text-align: center;
-      line-height: 50px;
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      z-index: 1100;
-    }
-
-    .floating-size-btn:hover {
-      background-color: #45a049;
     }
   </style>
 </head>
-<body>
 
+<body>
   <div class="header">
-    <img src="https://i.imgur.com/2GRPCTA.jpg" alt="DUDIE 마크">
+    <img src="https://i.imgur.com/2GRPCTA.jpg" alt="DUDIE 로고">
     <div class="header-title">
       <span class="main">DUDIE 신상 단가표</span>
       <span class="sub">( 카톡문의 / dudie )</span>
     </div>
+     <img src="https://i.imgur.com/2GRPCTA.jpg" alt="DUDIE 로고">
   </div>
 
-  <div class="container" id="product-container">
-    <!-- 상품 카드가 여기에 추가됩니다 -->
+
+  <!-- 대분류 탭 -->
+  <div class="tabs">
+    <div class="tab active" data-category="all">전체</div>
+    <div class="tab" data-category="New">신상</div>
+    <div class="tab" data-category="Socks">양말</div>
+    <div class="tab" data-category="Hats">모자</div>
+    <div class="tab" data-category="Bags">가방</div>
+    <div class="tab" data-category="Acc">악세사리</div>
+    <div class="tab" data-category="Shoes">신발</div>
   </div>
 
-  <!-- 팝업창 -->
-  <div class="popup" id="popup">
-    <div class="popup-header">
-      양말 사이즈 안내
-      <button class="close-popup-btn" onclick="closePopup()">×</button>
+  <!-- 하위 탭 -->
+  <div class="sub-tabs" id="sub-tabs" style="display: none;"></div>
+
+  <!-- 상품 컨테이너 -->
+  <div class="container" id="product-container"></div>
+
+  <div class="popup" id="order-popup">
+    <div class="popup-header">주문표</div>
+    <div class="divider"></div>
+    <table class="order-list" id="order-list">
+      <thead>
+        <tr>
+          <th>상품명</th>
+          <th>색상</th>
+          <th>사이즈</th>
+          <th>개수</th>
+          <th>삭제</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="total-summary-wrapper">
+      <div class="popup-content" id="total-summary" data-quantity="0" data-total="0">
+        총 개수: 0개
+      </div>
     </div>
+
+    <div class="popup-content" id="action-button">
+      <button class="action-button" id="copy-button" onclick="copyOrderTable()">주문표 복사</button>
+      <button class="action-button" id="save-button" onclick="saveOrderTable()">메모장으로 저장</button>
+      <button class="action-button" id="excel-button" onclick="saveOrderToExcel()">엑셀로 저장</button>
+    </div>
+  </div>
+
+  <div class="popup" id="size-popup">
+    <div class="popup-header">양말 사이즈 안내</div>
     <div class="popup-content">
-      <p>양말 사이즈에 대한 정보를 확인하세요:</p>
-      <ul>
-        <li><strong>XXL:</strong> 220mm ~ 240mm</li>
-        <li><strong>XL:</strong> 190mm ~ 220mm</li>
-        <li><strong>L:</strong> 150mm ~ 180mm</li>
-        <li><strong>M:</strong> 130mm ~ 150mm</li>
-        <li><strong>S:</strong> 110mm ~ 130mm</li>
-      </ul>
-    </div>
+      XXL = 220mm ~ 240mm<br>
+      XL  = 190mm ~ 220mm<br>
+      L = 170mm ~ 190mm<br>
+      M = 150mm ~ 170mm
+</div>
+
+
   </div>
 
-  <!-- 사이즈 보기 버튼 -->
-  <button class="floating-size-btn" onclick="togglePopup()">Size</button>
+  <div class="popup-buttons">
+    <button class="popup-button size" onclick="togglePopup('size-popup', 'order-popup')">Size</button>
+    <button class="popup-button order" onclick="togglePopup('order-popup', 'size-popup')">주문</button>
+  </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  
   <script>
+    // 제품 데이터 - 사이즈와 색상 정보 추가
     const products = [
-      {
-        name: "콜런 키링",
-        price: "4000",
-        material: "혼합",
-        size: "1/2/3/4/5/6/7",
-        color: "",
-        image: "https://i.imgur.com/bFui6lx.jpg"
-      },
-      {
-        name: "마롱 키링",
-        price: "6000",
-        material: "혼합",
-        size: "",
-        color: "고양핑크 / 고양아이 / 토끼핑크 / 토끼아이",
-        image: "https://i.imgur.com/2PN1FLb.jpg"
-      },
-      {
-        name: "오아캡",
-        price: "9000",
-        material: "면혼방",
-        size: "FREE (50~54cm)",
-        color: "블랙 / 그레이 / 퍼플 / 베이지",
-        image: "https://i.imgur.com/aIVhqB1.jpg"
-      },
-      {
-        name: "치렝 레깅스 <무발>",
-        price: "9000",
-        material: "면혼방",
-        size: "M - 2세 ~ 4세, S - 0세 ~ 2세",
-        color: "아이보리 / 핑크 / 블루",
-        image: "https://i.imgur.com/rixAHxe.jpg"
-      },
-      {
-        name: "믹스 스마일 4종",
-        price: "5000",
-        material: "면혼방",
-        size: "FREE (190~260mm)",
-        color: "",
-        image: "https://i.imgur.com/NzTN3A6.jpg"
-      },
-      {
-        name: "바람 5종 세트",
-        price: "5000",
-        material: "면혼방",
-        size: "XXL, XL, L, M",
-        color: "",
-        image: "https://i.imgur.com/IIDNApt.jpg"
-      }
+     {name: "가죽지갑1", price: 1000, categories: ["", "Acc","A01"], image: "https://drive.google.com/file/d/1PUw1t8PaCaASne3QSGW7ekpizuJD5BF_/view?usp=sharing", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑2", price: 2000, categories: ["New", "Socks","S01"], image: "https://drive.google.com/file/d/11ABjSBXCVLY5vrPKwW3g4LnmHXhBZLvi/view?usp=sharing", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑3", price: 3000, categories: ["New", "Socks","S01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑4", price: 4000, categories: ["New", "Socks","S01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑5", price: 5000, categories: ["", "Socks","S03"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑6", price: 6000, categories: ["", "Socks","S04"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑7", price: 7000, categories: ["New", "Socks","S04"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑8", price: 8000, categories: ["New", "Socks","S04"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑9", price: 9000, categories: ["", "Socks","S04"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑10", price: 10000, categories: ["New", "Hats","H01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑11", price: 11000, categories: ["New", "Hats","H01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑12", price: 12000, categories: ["New", "Hats","H02"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑13", price: 13000, categories: ["", "Hats","H03"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑14", price: 14000, categories: ["", "Bags","B01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑15", price: 15000, categories: ["New", "Bags","B01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑16", price: 16000, categories: ["", "Bags","B01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
+{name: "가죽지갑17", price: 17000, categories: ["", "Bags","B03"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"}
+
     ];
 
+    const subCategories = {
+      Socks: [
+        { label: "사이즈 양말", value: "S01" },
+        { label: "FREE 양말", value: "S02" },
+        { label: "무꿈치 양말", value: "S03" },
+        { label: "타이즈", value: "S04" },
+      ],
+      Hats: [
+        { label: "캡 모자", value: "H01" },
+        { label: "벙거지", value: "H02" },
+        { label: "여름모자", value: "H03" },
+      ],
+      Bags: [
+        { label: "백팩", value: "B01" },
+        { label: "크로스백", value: "B02" },
+        { label: "토트백", value: "B03" },
+        { label: "여름가방", value: "B04" },
+      ],
+      Acc: [
+        { label: "헤어핀", value: "A01" },
+        { label: "선글라스", value: "A02" },
+        { label: "스카프", value: "A03" },
+      ],
+    };
+
     const container = document.getElementById("product-container");
+    const subTabs = document.getElementById("sub-tabs");
 
-    products.forEach(product => {
-      const card = document.createElement("div");
-      card.className = "card";
+    // 상품 카드 생성 함수
+    function createProductCards() {
+      // container를 비웁니다
+      container.innerHTML = '';
+      
+      // 모든 제품에 대해 카드를 생성합니다
+      products.forEach(product => {
+        const card = document.createElement("div");
+        card.className = `card ${product.categories.join(" ")}`;
 
-      const img = document.createElement("img");
-      img.src = product.image;
-      img.alt = product.name;
-      card.appendChild(img);
+        // 신상 스티커 추가
+        if (product.categories.includes("New")) {
+          const newSticker = document.createElement("div");
+          newSticker.className = "new-sticker";
+          newSticker.textContent = "NEW";
+          card.appendChild(newSticker);
+        }
 
-      const content = document.createElement("div");
-      content.className = "card-content";
+        const img = document.createElement("img");
+        img.src = product.image;
+        img.alt = product.name;
+        card.appendChild(img);
 
-      const name = document.createElement("div");
-      name.className = "product-name";
-      name.textContent = product.name;
-      content.appendChild(name);
+        const content = document.createElement("div");
+        content.className = "card-content";
 
-      const info = document.createElement("div");
-      info.className = "info";
-      info.innerHTML += `<div><strong>단가</strong> ${parseInt(product.price).toLocaleString("ko-KR")}원</div>`;
-      info.innerHTML += `<div><strong>소재</strong> ${product.material}</div>`;
-      if (product.color) {
-        info.innerHTML += `<div><strong>색상</strong> ${product.color}</div>`;
-      }
-      if (product.size) {
-        info.innerHTML += `<div><strong>사이즈</strong> ${product.size}</div>`;
-      }
+        const name = document.createElement("div");
+        name.className = "product-name";
+        name.textContent = product.name;
+        content.appendChild(name);
 
-      content.appendChild(info);
-      card.appendChild(content);
-      container.appendChild(card);
+        const price = document.createElement("div");
+        price.className = "product-price";
+        price.textContent = `${product.price.toLocaleString()}원`;
+        content.appendChild(price);
+
+        // 드롭다운 추가
+        const dropdown = document.createElement("div");
+        dropdown.className = "dropdown";
+
+        // 사이즈 선택
+        const sizesArray = product.sizes ? product.sizes.split("/") : [];
+        let sizeSelect;
+        
+        if (sizesArray.length > 0) {
+          sizeSelect = document.createElement("select");
+          sizeSelect.innerHTML = `<option value="">사이즈 선택</option>`;
+          sizesArray.forEach(size => {
+            sizeSelect.innerHTML += `<option value="${size}">${size}</option>`;
+          });
+          dropdown.appendChild(sizeSelect);
+        }
+
+        // 색상 선택
+        const colorsArray = product.colors ? product.colors.split("/") : [];
+        let colorSelect;
+        
+        if (colorsArray.length > 0) {
+          colorSelect = document.createElement("select");
+          colorSelect.innerHTML = `<option value="">색상 선택</option>`;
+          colorsArray.forEach(color => {
+            colorSelect.innerHTML += `<option value="${color}">${color}</option>`;
+          });
+          dropdown.appendChild(colorSelect);
+        }
+
+        content.appendChild(dropdown);
+
+        // 수량 조절
+        const quantity = document.createElement("div");
+        quantity.className = "quantity";
+
+        const minusBtn = document.createElement("button");
+        minusBtn.textContent = "-";
+        minusBtn.disabled = true;
+
+        const qtyInput = document.createElement("input");
+        qtyInput.type = "number";
+        qtyInput.value = 0;
+        qtyInput.min = 0;
+
+        const plusBtn = document.createElement("button");
+        plusBtn.textContent = "+";
+
+        minusBtn.onclick = () => {
+          if (qtyInput.value > 0) {
+            qtyInput.value--;
+          }
+          minusBtn.disabled = qtyInput.value <= 0;
+        };
+
+        plusBtn.onclick = () => {
+          qtyInput.value++;
+          minusBtn.disabled = qtyInput.value <= 0;
+        };
+
+        const resetQuantity = () => {
+          qtyInput.value = 0;
+          minusBtn.disabled = true;
+        };
+
+        // 옵션 변경 시 수량 초기화
+        if (sizeSelect) {
+          sizeSelect.addEventListener("change", resetQuantity);
+        }
+        
+        if (colorSelect) {
+          colorSelect.addEventListener("change", resetQuantity);
+        }
+
+        quantity.appendChild(minusBtn);
+        quantity.appendChild(qtyInput);
+        quantity.appendChild(plusBtn);
+
+        content.appendChild(quantity);
+
+        // 주문표에 추가 버튼
+        const addToOrderBtn = document.createElement("button");
+        addToOrderBtn.className = "add-to-order";
+        addToOrderBtn.textContent = "주문표 추가";
+
+       addToOrderBtn.onclick = () => {
+  const selectedSize = sizeSelect ? sizeSelect.value : "";
+  const selectedColor = colorSelect ? colorSelect.value : "";
+
+  if (sizesArray.length > 0 && !selectedSize) {
+    alert("사이즈를 선택하세요.");
+    return;
+  }
+
+  if (colorsArray.length > 0 && !selectedColor) {
+    alert("색상을 선택하세요.");
+    return;
+  }
+
+  const qty = parseInt(qtyInput.value, 10) || 0;
+  if (qty <= 0) {
+    alert("수량을 입력하세요.");
+    return;
+  }
+
+  // 주문에 추가
+  mergeOrAddToOrder(product.name, selectedColor, selectedSize, qty);
+  
+  // 주문 팝업이 열려있는 경우에만 열린 상태 유지
+  const orderPopup = document.getElementById('order-popup');
+  if (orderPopup.classList.contains("open")) {
+    // 이미 열려있으면 아무것도 하지 않음
+  } else {
+    // 닫혀있으면 닫힌 상태 유지
+  }
+  
+  // 옵션 초기화
+  if (sizeSelect) sizeSelect.value = "";
+  if (colorSelect) colorSelect.value = "";
+  resetQuantity();
+};
+        content.appendChild(addToOrderBtn);
+        card.appendChild(content);
+        container.appendChild(card);
+      });
+    }
+
+    // 초기 상품 카드 생성
+    createProductCards();
+
+    // 대분류 탭 클릭 이벤트
+    const tabs = document.querySelectorAll(".tab");
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        // 모든 탭 비활성화
+        tabs.forEach(t => t.classList.remove("active"));
+        // 현재 탭 활성화
+        tab.classList.add("active");
+
+        const category = tab.getAttribute("data-category");
+        const cards = document.querySelectorAll(".card");
+
+        // 하위 탭 초기화
+        subTabs.innerHTML = "";
+        subTabs.style.display = "none";
+
+        // 모든 카드 숨김
+        cards.forEach(card => {
+          card.style.display = "none";
+        });
+
+        // 선택된 카테고리만 표시
+        if (category === "all") {
+          cards.forEach(card => {
+            card.style.display = "flex";
+          });
+        } else {
+          const filteredCards = document.querySelectorAll(`.card.${category}`);
+          filteredCards.forEach(card => {
+            card.style.display = "flex";
+          });
+
+          // 하위 카테고리 탭 생성
+          if (subCategories[category]) {
+            subCategories[category].forEach(sub => {
+              const subTab = document.createElement("div");
+              subTab.className = "sub-tab";
+              subTab.textContent = sub.label;
+              subTab.setAttribute("data-sub-category", sub.value);
+              subTabs.appendChild(subTab);
+
+              subTab.addEventListener("click", () => {
+                // 모든 하위 탭 비활성화
+                subTabs.querySelectorAll(".sub-tab").forEach(st => st.classList.remove("active"));
+                subTab.classList.add("active");
+
+                // 하위 카테고리 필터링
+                const subFilteredCards = document.querySelectorAll(`.card.${sub.value}`);
+                cards.forEach(card => {
+                  card.style.display = "none";
+                });
+                subFilteredCards.forEach(card => {
+                  card.style.display = "flex";
+                });
+              });
+            });
+
+            subTabs.style.display = "flex"; // 하위 탭 표시
+          } else {
+            subTabs.style.display = "none"; // 하위 탭 숨김
+          }
+        }
+      });
     });
 
-    const popup = document.getElementById("popup");
+    // 초기화 (전체 탭 활성화)
+    document.querySelector(".tab[data-category='all']").click();
 
-    // 팝업 열기/닫기 기능
-    function togglePopup() {
-      popup.classList.toggle("open");
+    // 주문표에 추가 또는 병합
+    function mergeOrAddToOrder(product, color, size, quantity) {
+      const orderList = document.getElementById("order-list").querySelector("tbody");
+      let existingRow = null;
+
+      // 이미 존재하는 항목인지 확인
+      Array.from(orderList.children).forEach(row => {
+        const rowProduct = row.children[0].textContent;
+        const rowColor = row.children[1].textContent;
+        const rowSize = row.children[2].textContent;
+
+        if (rowProduct === product && rowColor === color && rowSize === size) {
+          existingRow = row;
+        }
+      });
+
+      // 이미 있는 상품이면 수량만 증가
+      if (existingRow) {
+        const currentQuantity = parseInt(existingRow.children[3].textContent.replace(/[^0-9]/g, ""), 10);
+        const newQuantity = currentQuantity + quantity;
+
+        existingRow.children[3].textContent = `${newQuantity}개`;
+        updateTotalSummary(quantity);
+      } else {
+        // 새 상품 추가
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${product}</td>
+          <td>${color}</td>
+          <td>${size}</td>
+          <td>${quantity}개</td>
+          <td><button onclick="removeOrder(this)">X</button></td>
+        `;
+        orderList.appendChild(row);
+
+        updateTotalSummary(quantity);
+      }
     }
 
-    function closePopup() {
-      popup.classList.remove("open");
+    // 주문 항목 삭제
+    function removeOrder(button) {
+      const row = button.parentElement.parentElement;
+      const quantity = parseInt(row.children[3].textContent.replace(/[^0-9]/g, ""), 10);
+
+      row.remove();
+      updateTotalSummary(-quantity);
     }
+
+    // 총 합계 업데이트
+    function updateTotalSummary(quantityChange) {
+      const totalSummary = document.getElementById("total-summary");
+      const currentQuantity = parseInt(totalSummary.dataset.quantity || "0", 10);
+      const newQuantity = currentQuantity + quantityChange;
+
+      totalSummary.dataset.quantity = newQuantity;
+      totalSummary.innerHTML = `총 개수: ${newQuantity}개`;
+    }
+
+// 기존 togglePopup 함수를 수정
+function togglePopup(openPopupId, closePopupId) {
+  const openPopup = document.getElementById(openPopupId);
+  const closePopup = document.getElementById(closePopupId);
+
+  if (closePopup.classList.contains("open")) {
+    closePopup.classList.remove("open");
+  }
+
+  // 토글 대신 상태를 체크해서 필요한 경우에만 열기
+  openPopup.classList.toggle("open");
+}
+
+// 새로운 함수: 팝업이 이미 열려있는지 확인
+function isPopupOpen(popupId) {
+  const popup = document.getElementById(popupId);
+  return popup.classList.contains("open");
+}
+
+// 새로운 함수: 팝업을 열기만 함 (토글하지 않음)
+function openPopup(popupId) {
+  const popup = document.getElementById(popupId);
+  if (!popup.classList.contains("open")) {
+    popup.classList.add("open");
+  }
+}
+
+    // 주문표 복사
+    function copyOrderTable() {
+      const orderList = document.getElementById("order-list");
+      const totalSummary = document.getElementById("total-summary");
+
+      let textToCopy = "========== 주문표 ==========\n\n";
+      textToCopy += `상품명 / 색상 / 사이즈 / 개수\n`;
+      textToCopy += `-----------------------------\n`;
+
+      Array.from(orderList.querySelectorAll("tbody tr")).forEach(row => {
+        const cells = row.querySelectorAll("td");
+        textToCopy += `${cells[0].textContent} / ${cells[1].textContent} / ${cells[2].textContent} / ${cells[3].textContent}\n`;
+      });
+
+      textToCopy += `\n===========================\n`;
+      textToCopy += `총 개수: ${totalSummary.dataset.quantity}개\n`;
+
+  navigator.clipboard.writeText(textToCopy).then(() => {
+        alert("주문표가 클립보드에 복사되었습니다.");
+      }).catch(err => {
+        alert("복사에 실패했습니다. 다시 시도해주세요.");
+      });
+    }
+
+    // 메모장으로 저장
+    function saveOrderTable() {
+      const orderList = document.getElementById("order-list");
+      const totalSummary = document.getElementById("total-summary");
+
+      let textToSave = "========== 주문표 ==========\n\n";
+      textToSave += `상품명 / 색상 / 사이즈 / 개수\n`;
+      textToSave += `-----------------------------\n`;
+
+      Array.from(orderList.querySelectorAll("tbody tr")).forEach(row => {
+        const cells = row.querySelectorAll("td");
+        textToSave += `${cells[0].textContent} / ${cells[1].textContent} / ${cells[2].textContent} / ${cells[3].textContent}\n`;
+      });
+
+      textToSave += `\n===========================\n`;
+      textToSave += `총 개수: ${totalSummary.dataset.quantity}개\n`;
+
+      const blob = new Blob([textToSave], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "주문표.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // 엑셀로 저장
+    function saveOrderToExcel() {
+      const orderList = document.getElementById("order-list");
+      const totalSummary = document.getElementById("total-summary");
+
+      const rows = [
+        ["상품명", "색상", "사이즈", "개수"]
+      ];
+
+      Array.from(orderList.querySelectorAll("tbody tr")).forEach(row => {
+        const cells = row.querySelectorAll("td");
+        rows.push([
+          cells[0].textContent,
+          cells[1].textContent,
+          cells[2].textContent,
+          cells[3].textContent
+        ]);
+      });
+
+      rows.push([]);
+      rows.push(["", "", "총 개수", totalSummary.dataset.quantity + "개"]);
+
+      const worksheet = XLSX.utils.aoa_to_sheet(rows);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "주문표");
+
+      XLSX.writeFile(workbook, "주문표.xlsx");
+    }
+
+
   </script>
 </body>
 </html>
