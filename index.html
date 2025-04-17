@@ -98,7 +98,7 @@
     }
 
     .card img {
-      width: 70%;
+      width: 60%;
       height: auto;
       object-fit: cover;
     }
@@ -332,6 +332,71 @@
       background-color: #45a049;
     }
 
+  #size-popup {
+    padding: 20px;
+    background-color: #fff8fa;
+  }
+  
+  #size-popup .popup-header {
+    font-size: 24px;
+    color: #4CAF50;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  
+  .size-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .size-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .size-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  
+  .size-label {
+    font-size: 22px;
+    font-weight: bold;
+    color: #4CAF50;
+    width: 80px;
+    text-align: center;
+    padding: 8px 12px;
+    border-right: 2px dashed #e0e0e0;
+  }
+  
+  .size-value {
+    font-size: 18px;
+    color: #333;
+    padding-left: 20px;
+    flex: 1;
+  }
+  
+  .size-image {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .size-caption {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+  }
+  
+
     .action-buttons {
       display: flex;
       justify-content: space-between;
@@ -365,6 +430,59 @@
   font-size: 18px;
   font-weight: bold;
 }
+
+.sold-out-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.sold-out-x {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sold-out-x::before,
+.sold-out-x::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  background-color: red;
+}
+
+.sold-out-x::before {
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.sold-out-x::after {
+  transform: translateX(-50%) rotate(-45deg);
+}
+
+.sold-out-text {
+  background: red;
+  color: white;
+  padding: 5px 15px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 4px;
+  z-index: 6;
+}
+
+
 
     @media screen and (max-width: 800px) {
       .card {
@@ -444,17 +562,33 @@
     </div>
   </div>
 
-  <div class="popup" id="size-popup">
-    <div class="popup-header">양말 사이즈 안내</div>
-    <div class="popup-content">
-      XXL = 220mm ~ 240mm<br>
-      XL  = 190mm ~ 220mm<br>
-      L = 170mm ~ 190mm<br>
-      M = 150mm ~ 170mm
-</div>
 
-
+<div class="popup" id="size-popup">
+  <div class="popup-header">양말 사이즈 안내</div>
+  <div class="divider"></div>
+  <div class="size-content">
+    <div class="size-item">
+      <div class="size-label">XXL</div>
+      <div class="size-value">220mm ~ 240mm</div>
+    </div>
+    <div class="size-item">
+      <div class="size-label">XL</div>
+      <div class="size-value">190mm ~ 220mm</div>
+    </div>
+    <div class="size-item">
+      <div class="size-label">L</div>
+      <div class="size-value">170mm ~ 190mm</div>
+    </div>
+    <div class="size-item">
+      <div class="size-label">M</div>
+      <div class="size-value">150mm ~ 170mm</div>
+    </div>
   </div>
+  <div class="size-image">
+    <img src="/api/placeholder/300/200" alt="양말 사이즈 가이드">
+    <div class="size-caption">양말 사이즈 측정 가이드</div>
+  </div>
+</div>
 
   <div class="popup-buttons">
     <button class="popup-button size" onclick="togglePopup('size-popup', 'order-popup')">Size</button>
@@ -466,23 +600,37 @@
   <script>
     // 제품 데이터 - 사이즈와 색상 정보 추가
     const products = [
-     {name: "가죽지갑1", price: 1000, categories: ["", "Acc","A01"], image: "https://drive.google.com/file/d/1PUw1t8PaCaASne3QSGW7ekpizuJD5BF_/view?usp=sharing", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑2", price: 2000, categories: ["New", "Socks","S01"], image: "https://drive.google.com/file/d/11ABjSBXCVLY5vrPKwW3g4LnmHXhBZLvi/view?usp=sharing", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑3", price: 3000, categories: ["New", "Socks","S01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑4", price: 4000, categories: ["New", "Socks","S01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑5", price: 5000, categories: ["", "Socks","S03"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑6", price: 6000, categories: ["", "Socks","S04"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑7", price: 7000, categories: ["New", "Socks","S04"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑8", price: 8000, categories: ["New", "Socks","S04"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑9", price: 9000, categories: ["", "Socks","S04"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑10", price: 10000, categories: ["New", "Hats","H01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑11", price: 11000, categories: ["New", "Hats","H01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑12", price: 12000, categories: ["New", "Hats","H02"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑13", price: 13000, categories: ["", "Hats","H03"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑14", price: 14000, categories: ["", "Bags","B01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑15", price: 15000, categories: ["New", "Bags","B01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑16", price: 16000, categories: ["", "Bags","B01"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"},
-{name: "가죽지갑17", price: 17000, categories: ["", "Bags","B03"], image: "https://i.imgur.com/bFui6lx.jpg", colors: "브라운/블랙", sizes: "FREE"}
+{name: "해시백", price: 9000, categories: ["New", "Bags","B03"], image: "https://drive.google.com/thumbnail?id=11ABjSBXCVLY5vrPKwW3g4LnmHXhBZLvi&sz=w1000", colors: "아이보리/블랙/옐로우/베이지/레드", sizes: "32*30*15"},
+{name: "허니핀", price: 5000, categories: ["New", "Acc","A01"], image: "https://drive.google.com/thumbnail?id=1PUw1t8PaCaASne3QSGW7ekpizuJD5BF_&sz=w1000", colors: "1번/2번/3번/4번/5번", sizes: "FREE"},
+{name: "달랑핀", price: 3000, categories: ["New", "Acc","A01"], image: "https://drive.google.com/thumbnail?id=1HKQCL_YBHrfrDMzd9PoilUxDK0yF3M4x&sz=w1000", colors: "1번/2번/3번/4번/5번/6번/7번", sizes: "FREE"},
+{name: "나티 안경", price: 5000, categories: ["New", "Acc","A02"], image: "https://drive.google.com/thumbnail?id=1N5fJlZbtns2yXdBZNXzGWWL1_nHgQ1SQ&sz=w1000", colors: "투명/호피/형광/핑크/블랙", sizes: "FREE"},
+{name: "몬스터 5종세트", price: 5000, categories: ["New", "Socks","S01"], image: "https://drive.google.com/thumbnail?id=1pil6cA-CEDifiZBC54lXbBVFII24l7x0&sz=w1000", colors: "5종세트", sizes: "XL/L/M"},
+{name: "마럭 선글라스", price: 5000, categories: ["New", "Acc","A02"], image: "https://drive.google.com/thumbnail?id=1D3Ol1SymXS7MPpZlPKfSX4DaCDwMd14_&sz=w1000", colors: "블랙/화이트", sizes: "FREE"},
+{name: "볼리 선글라스", price: 5000, categories: ["New", "Acc","A02"], image: "https://drive.google.com/thumbnail?id=1DgI9seWvch7O_YElR9YEfxGCrsfu8EmE&sz=w1000", colors: "화이트/엘로우/레드/블랙", sizes: "FREE"},
+{name: "말랑말랑 선글라스", price: 5000, categories: ["New", "Acc","A02"], image: "https://drive.google.com/thumbnail?id=1DNf4HmHagAPOyYIEIPDUuIicl1cFxkq7&sz=w1000", colors: "핑크/민트/블루/옐로우/퍼플 ", sizes: "FREE"},
+{name: "큐티 4종세트", price: 5000, categories: ["New", "Socks","S01"], image: "https://drive.google.com/thumbnail?id=11QXo1lhfpTTexljo7uh6rqnlUSbb1c-V&sz=w1000", colors: "4종세트", sizes: "XL/L/M"},
+{name: "컴파스 5종세트", price: 5000, categories: ["New", "Socks","S01"], image: "https://drive.google.com/thumbnail?id=108nbkFc79Edutbt96Lpj4RYJllV1hxBD&sz=w1000", colors: "5종세트", sizes: "2XL/XL/L/M"},
+{name: "디록 5종세트", price: 4000, categories: ["New", "Socks","S01"], image: "https://drive.google.com/thumbnail?id=10WZPxCYaEVDjUzi7h2R_QvjExRKgMwUB&sz=w1000", colors: "5종세트", sizes: "XL/L/M"},
+{name: "바로 4종세트", price: 5000, categories: ["New", "Socks","S02"], image: "https://drive.google.com/thumbnail?id=1fMIAF8MuyCAmHwH-3-FKrID5JU15E4I0&sz=w1000", colors: "4종세트", sizes: "FREE(190~ 260mm)"},
+{name: "스타 4종세트", price: 5000, categories: ["New", "Socks","S02"], image: "https://drive.google.com/thumbnail?id=1pxp9egrH6pVfLGK5VdSLq78yBgkSaawj&sz=w1000", colors: "4종세트", sizes: "FREE(190~ 260mm)"},
+{name: "밀단 4종세트", price: 6000, categories: ["New", "Socks","S02"], image: "https://drive.google.com/thumbnail?id=1LTnBEJZofTCChuVGYFe8U5dk35OMGVbV&sz=w1000", colors: "4종세트", sizes: "FREE(190~ 260mm)"},
+{name: "멀티 벙거지", price: 5000, categories: ["New", "Hats","H02"], image: "https://drive.google.com/thumbnail?id=1ZusQBVoWPH0XEPidaH728eqTQaU3b2cK&sz=w1000", colors: "1.레드믹스/2.엘로우믹스/3.화이트믹스/4.스카이믹스/5.오렌지믹스", sizes: "FREE(50~54cm)"},
+{name: "무톤 4종세트", price: 7000, categories: ["New", "Socks","S03"], image: "https://drive.google.com/thumbnail?id=1zufyYPrXx0sbQLn2hMGRRrT86F66urF-&sz=w1000", colors: "무꿈치 상품 입니다.", sizes: "FREE"},
+{name: "비커캡", price: 6000, categories: ["New", "Hats","H03"], image: "https://drive.google.com/thumbnail?id=1L5zjvYaUAgy9_V7aesURtQ3jAw4wGa3e&sz=w1000", colors: "블루/레드/핑크/옐로우/그레이/민트/베이지/블랙", sizes: "FREE(50~54cm)"},
+{name: "스투백", price: 6000, categories: ["New", "Bags","B04"], image: "https://drive.google.com/thumbnail?id=1MSSOdVREJ5CT7NuQAqTCuDxTl-rjob7-&sz=w1000", colors: "핑크/블랙/화이트/민트", sizes: "30*22"},
+{name: "핑크캡", price: 10000, categories: ["New", "Hats","H03"], image: "https://drive.google.com/thumbnail?id=1RrlQe2mht9o95vtvSJHlNg3W5ZyLJLT9&sz=w1000", colors: "핑크캡", sizes: "FREE(50~54cm)"},
+{name: "커백팩", price: 11000, categories: ["New", "Bags","B01"], image: "https://drive.google.com/thumbnail?id=10q-OWHRnRlSvaoibY3lZrxVL1dK41zl9&sz=w1000", colors: "레드/블루/그린/블랙", sizes: "33*42*14"},
+{name: "통백", price: 4000, categories: ["New", "Bags","B02"], image: "https://drive.google.com/thumbnail?id=1J61f7_bAQAJq1srpmCgWMZ0h_h9aKO41&sz=w1000", colors: "블루/핑크/그레이/베이지/블랙", sizes: "23*10 끈70*150"},
+{name: "페이즐백", price: 7000, categories: ["New", "Bags","B02"], image: "https://drive.google.com/thumbnail?id=1TELV1xMUOKVCEEC4NH5-wliMvcGhN66b&sz=w1000", colors: "화이트/블랙/아이/네이비", sizes: "43*36"},
+{name: "무리본 Set", price: 3000, categories: ["New", "Acc","A01"], image: "https://drive.google.com/thumbnail?id=1wI8-kLCLkO8xa3NkvWNBWqNNX-0Or2VL&sz=w1000", colors: "무리본 Set", sizes: "FREE"},
+{name: "몰리핀", price: 2000, categories: ["New", "Acc","A01"], image: "https://drive.google.com/thumbnail?id=1YrBNCNOFfdccdQBTZfnb15bt8HqDDmpx&sz=w1000", colors: "1번/2번/3번/4번/5번/6번/7번/8번/9번/10번", sizes: "FREE"},
+{name: "율핀", price: 2000, categories: ["New", "Acc","A01"], image: "https://drive.google.com/thumbnail?id=1_9ZCrwT5FDDDCSoXgDeQNasUj03y3FyA&sz=w1000", colors: "1번/2번/3번/4번/5번/6번/7번/8번/9번/10번/11번", sizes: "FREE"},
+{name: "믹스 스마일 4종세트", price: 5000, categories: ["New", "Socks","S02"], image: "https://drive.google.com/thumbnail?id=1ByXTSZGhy8Rw7W48TgkxZH-UE2opYgab&sz=w1000", colors: "4종세트", sizes: "FREE(190~ 260mm)"},
+{name: "치렝 레깅스 - 무발", price: 9000, categories: ["New", "Socks","S04"], image: "https://drive.google.com/thumbnail?id=174eycPtlHK7QjX4g1bZMykQUgCEAl6lp&sz=w1000", colors: "아이보리/핑크/블루", sizes: "S - 0세~2세/M - 2세~4세"},
+{name: "오아 캡", price: 9000, categories: ["New", "Hats","H01"], image: "https://drive.google.com/thumbnail?id=1io7APygk1sPZdCnwsqIySAa5UEAqGY04&sz=w1000", colors: "블랙/그레이/퍼플/베이지", sizes: "FREE(50~54cm)"},
+{name: "마롱 키링", price: 6000, categories: ["New", "Acc","A04"], image: "https://drive.google.com/thumbnail?id=1xOz2wythdKO5IvABhZWrR8oVmFIDVmzW&sz=w1000", colors: "고양핑크/고양아이/토끼핑크/토끼아이", sizes: "FREE"},
+{name: "콜런 키링", price: 4000, categories: ["New", "Acc","A04"], image: "https://drive.google.com/thumbnail?id=1IrogEkBDhNCEEr7RZPfLd_lXLWTzovZ3&sz=w1000", colors: "1번/2번/3번/4번/5번/6번/7번", sizes: "FREE", soldOut: true}
+
 
     ];
 
@@ -508,6 +656,7 @@
         { label: "헤어핀", value: "A01" },
         { label: "선글라스", value: "A02" },
         { label: "스카프", value: "A03" },
+        { label: "키링", value: "A04" },
       ],
     };
 
@@ -520,22 +669,41 @@
       container.innerHTML = '';
       
       // 모든 제품에 대해 카드를 생성합니다
-      products.forEach(product => {
-        const card = document.createElement("div");
-        card.className = `card ${product.categories.join(" ")}`;
+  products.forEach(product => {
+    const card = document.createElement("div");
+    card.className = `card ${product.categories.join(" ")}`;
+    card.style.position = "relative"; // 추가: 상대적 위치 설정
 
-        // 신상 스티커 추가
-        if (product.categories.includes("New")) {
-          const newSticker = document.createElement("div");
-          newSticker.className = "new-sticker";
-          newSticker.textContent = "NEW";
-          card.appendChild(newSticker);
-        }
+    // 신상 스티커 추가
+    if (product.categories.includes("New")) {
+      const newSticker = document.createElement("div");
+      newSticker.className = "new-sticker";
+      newSticker.textContent = "NEW";
+      card.appendChild(newSticker);
+    }
 
-        const img = document.createElement("img");
-        img.src = product.image;
-        img.alt = product.name;
-        card.appendChild(img);
+    const img = document.createElement("img");
+    img.src = product.image;
+    img.alt = product.name;
+    card.appendChild(img);
+
+    // 품절 표시 추가
+    if (product.soldOut) {
+      const soldOutWrapper = document.createElement("div");
+      soldOutWrapper.className = "sold-out-wrapper";
+      
+      const soldOutX = document.createElement("div");
+      soldOutX.className = "sold-out-x";
+      
+      const soldOutText = document.createElement("div");
+      soldOutText.className = "sold-out-text";
+      soldOutText.textContent = "품절";
+      
+      soldOutWrapper.appendChild(soldOutX);
+      soldOutWrapper.appendChild(soldOutText);
+      card.appendChild(soldOutWrapper);
+    }
+
 
         const content = document.createElement("div");
         content.className = "card-content";
@@ -631,11 +799,21 @@
         content.appendChild(quantity);
 
         // 주문표에 추가 버튼
-        const addToOrderBtn = document.createElement("button");
-        addToOrderBtn.className = "add-to-order";
-        addToOrderBtn.textContent = "주문표 추가";
+const addToOrderBtn = document.createElement("button");
+addToOrderBtn.className = "add-to-order";
+addToOrderBtn.textContent = "주문표 추가";
 
-       addToOrderBtn.onclick = () => {
+// 품절 상품일 경우 버튼 비활성화
+if (product.soldOut) {
+  addToOrderBtn.disabled = true;
+  addToOrderBtn.style.backgroundColor = "#cccccc";
+  addToOrderBtn.style.cursor = "not-allowed";
+}
+
+addToOrderBtn.onclick = () => {
+  // 품절 상품은 클릭 이벤트 무시
+  if (product.soldOut) return;
+  
   const selectedSize = sizeSelect ? sizeSelect.value : "";
   const selectedColor = colorSelect ? colorSelect.value : "";
 
@@ -912,6 +1090,7 @@ function openPopup(popupId) {
       XLSX.writeFile(workbook, "주문표.xlsx");
     }
 
+ 
 
   </script>
 </body>
