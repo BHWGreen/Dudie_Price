@@ -1697,7 +1697,9 @@ function openDetailModal(product) {
       ${descriptionSection}
     <div class="detail-specs">
       <div class="detail-spec-item">
-        <span class="detail-spec-label">카테고리:</span> ${product.categories.filter(cat => !['S01', 'S02', 'S03', 'S04', 'H01', 'H02', 'H03', 'B01', 'B02', 'B03', 'B04', 'B05', 'A01', 'A02', 'A03', 'A04', 'Top', 'Bottom', 'Shoes', 'RC', 'SG', 'E01'].includes(cat)).join(', ')}
+        <span class="detail-spec-label">카테고리:</span> ${product.categories.filter(cat => 
+  cat !== "" && !['S01', 'S02', 'S03', 'S04', 'H01', 'H02', 'H03', 'B01', 'B02', 'B03', 'B04', 'B05', 'A01', 'A02', 'A03', 'A04', 'Top', 'Bottom', 'Shoes', 'RC', 'SG', 'E01'].includes(cat)
+).join(', ')}
       </div>
      ${materialInfo}
       <div class="detail-spec-item">
@@ -1859,7 +1861,9 @@ function openDetailModal(product) {
       ${descriptionSection}
     <div class="detail-specs">
       <div class="detail-spec-item">
-        <span class="detail-spec-label">카테고리:</span> ${product.categories.filter(cat => !['S01', 'S02', 'S03', 'S04', 'H01', 'H02', 'H03', 'B01', 'B02', 'B03', 'B04', 'B05', 'A01', 'A02', 'A03', 'A04', 'Top', 'Bottom', 'Shoes', 'RC', 'SG', 'E01'].includes(cat)).join(', ')}
+        <span class="detail-spec-label">카테고리:</span> ${product.categories.filter(cat => 
+  cat !== "" && !['S01', 'S02', 'S03', 'S04', 'H01', 'H02', 'H03', 'B01', 'B02', 'B03', 'B04', 'B05', 'A01', 'A02', 'A03', 'A04', 'Top', 'Bottom', 'Shoes', 'RC', 'SG', 'E01'].includes(cat)
+).join(', ')}
       </div>
      ${materialInfo}
       <div class="detail-spec-item">
