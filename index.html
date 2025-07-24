@@ -326,90 +326,98 @@
       color: white;
       border: none;
       border-radius: 50%;
-      font-size: 16px;
+      font-size: 12px;
       font-weight: bold;
       text-align: center;
-      line-height: 50px;
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .popup-button.size {
-      background-color: #FF5722;
+    .popup-button.notice {
+      background-color: #2196F3;
     }
 
-    .popup-button.size:hover {
-      background-color: #E64A19;
+    .popup-button.notice:hover {
+      background-color: #1976D2;
     }
 
     .popup-button.order:hover {
       background-color: #45a049;
     }
 
-  #size-popup {
+ /* 공지사항 팝업 스타일 */
+  #notice-popup {
     padding: 20px;
-    background-color: #fff8fa;
+    background-color: #f8fffe;
   }
   
-  #size-popup .popup-header {
+  #notice-popup .popup-header {
     font-size: 24px;
-    color: #4CAF50;
+    color: #2196F3;
     text-align: center;
     margin-bottom: 15px;
     font-weight: bold;
   }
   
-  .size-content {
+  .notice-content {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
     margin: 20px 0;
   }
   
-  .size-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 15px;
+  .notice-item {
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
     transition: transform 0.2s ease;
   }
   
-  .size-item:hover {
+  .notice-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   }
   
-  .size-label {
-    font-size: 22px;
+  .notice-header {
+    background-color: #2196F3;
+    color: white;
+    padding: 12px 15px;
+    font-size: 16px;
     font-weight: bold;
-    color: #4CAF50;
-    width: 80px;
-    text-align: center;
-    padding: 8px 12px;
-    border-right: 2px dashed #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   
-  .size-value {
-    font-size: 18px;
-    color: #333;
-    padding-left: 20px;
-    flex: 1;
+  .notice-date {
+    font-size: 12px;
+    opacity: 0.9;
   }
   
-  .size-image {
-    margin-top: 30px;
-    text-align: center;
-  }
-  
-  .size-caption {
-    margin-top: 10px;
+  .notice-body {
+    padding: 15px;
     font-size: 14px;
-    color: #666;
-    font-style: italic;
+    line-height: 1.6;
+    color: #333;
   }
   
+  .notice-important {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0;
+    color: #856404;
+  }
+  
+  .notice-important::before {
+    content: "⚠️ ";
+    font-weight: bold;
+  }
 
     .action-buttons {
       display: flex;
@@ -786,39 +794,48 @@
   </div>
 
 
-<div class="popup" id="size-popup">
-  <div class="popup-header">양말 사이즈 안내</div>
+<!-- 공지사항 팝업 -->
+<div class="popup" id="notice-popup">
+  <div class="popup-header">공지사항</div>
   <div class="divider"></div>
-  <div class="size-content">
-    <div class="size-item">
-      <div class="size-label">XXL</div>
-      <div class="size-value">220mm ~ 240mm</div>
+  <div class="notice-content">
+    
+
+    <!-- 공지사항 4 -->
+    <div class="notice-item">
+      <div class="notice-header">
+        <span>주문 및 문의 방법</span>
+        <span class="notice-date">2025.07.24</span>
+      </div>
+      <div class="notice-body">
+        <p>안녕하세요! DUDIE입니다.</p>
+        <p><strong>카카오톡 문의:</strong> dudie</p>
+        <p><strong>주문 방법:</strong></p>
+        <p>1. 원하시는 상품을 주문표에 추가<br>
+        2. 주문표 복사 또는 엑셀 저장<br>
+        3. 카카오톡에 붙여넣기 또는 주문표 전송<br>
+      </div>
     </div>
-    <div class="size-item">
-      <div class="size-label">XL</div>
-      <div class="size-value">190mm ~ 220mm</div>
+
+
+    <!-- 공지사항 3 -->
+    <div class="notice-item">
+      <div class="notice-header">
+        <span>신상품 입고 알림</span>
+        <span class="notice-date">2025.07.24</span>
+      </div>
+      <div class="notice-body">
+        <p>🎉 <strong>가을 신상품이 입고되었습니다!</strong></p>
+      </div>
     </div>
-    <div class="size-item">
-      <div class="size-label">L</div>
-      <div class="size-value">170mm ~ 190mm</div>
-    </div>
-    <div class="size-item">
-      <div class="size-label">M</div>
-      <div class="size-value">150mm ~ 170mm</div>
-    </div>
-     <div class="size-item">
-      <div class="size-label">S</div>
-      <div class="size-value">130mm ~ 150mm</div>
-    </div>
-  </div>
-  <div class="size-image">
-    <div class="size-caption">*기본적인 사이즈이며, 각 상품의 설명란 참조</div>
+
+
   </div>
 </div>
 
   <div class="popup-buttons">
-    <button class="popup-button size" onclick="togglePopup('size-popup', 'order-popup')">Size</button>
-    <button class="popup-button order" onclick="togglePopup('order-popup', 'size-popup')">주문</button>
+    <button class="popup-button notice" onclick="togglePopup('notice-popup', 'order-popup')">공지</button>
+    <button class="popup-button order" onclick="togglePopup('order-popup', 'notice-popup')">주문</button>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
