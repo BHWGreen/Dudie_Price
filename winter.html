@@ -539,13 +539,31 @@
 .detail-close {
   position: absolute;
   top: 10px;
-  right: 15px;
-  font-size: 28px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
   font-weight: bold;
   cursor: pointer;
-  color: #555;
+  color: #fff;
+  background-color: #FF5722;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  z-index: 10;
 }
 
+.detail-close:hover {
+  background-color: #E64A19;
+  transform: scale(1.1);
+}
+
+.detail-close:active {
+  transform: scale(0.95);
+}
 .detail-info {
   display: flex;
   flex-direction: column;
@@ -725,8 +743,50 @@
         align-items: center;
         text-align: center;
       }
-
     }
+
+
+    /* 여기에 추가 ↓ */
+    .season-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #fff4e6 0%, #ffe0b2 100%);
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+      border: 1px solid #ffcc80;
+    }
+
+    .season-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%);
+    }
+
+    .season-icon {
+      font-size: 18px;
+    }
+
+    .season-text {
+      letter-spacing: 0.3px;
+    }
+
+    .season-arrow {
+      font-size: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .season-link:hover .season-arrow {
+      transform: translateX(-4px);
+    }
+
   </style>
 </head>
 
@@ -738,10 +798,17 @@
     </div>
   </div>
 
-<!-- 봄 신상 페이지로 돌아가기 버튼 -->
-<a href="index.html" style="text-decoration: none;">
-  <button class="season-switch">🌸 봄 신상 보러가기</button>
-</a>
+<!-- 신상품 페이지 이동 버튼 -->
+  <a href="index.html" style="text-decoration: none;">
+    <div class="season-link">
+      <span class="season-arrow">←</span>
+      <span class="season-text">봄 신상 보러가기</span>
+      <span class="season-icon">🌸</span>
+    </div>
+  </a>
+
+  <!-- 대분류 탭 -->
+  <div class="tabs">
   <!-- 대분류 탭 -->
   <div class="tabs">
     <div class="tab active" data-category="all">전체</div>
@@ -1876,6 +1943,9 @@ function openDetailModal(product) {
   
   // 스크롤 방지
   document.body.style.overflow = 'hidden';
+
+  // 브라우저 히스토리에 추가 (뒤로가기 감지용)
+  history.pushState({ modal: true }, '');
 }
 
 // 이미지 갤러리 네비게이션 함수들
@@ -1923,7 +1993,6 @@ function updateDetailGallery() {
     }
   });
 }
-
 // 상세 페이지 모달 닫기
 function closeDetailModal() {
   const detailModal = document.getElementById('detail-modal');
@@ -1931,6 +2000,11 @@ function closeDetailModal() {
   
   // 스크롤 복원
   document.body.style.overflow = 'auto';
+  
+  // 히스토리 상태 확인 후 제거 (여기에 추가!)
+  if (history.state && history.state.modal) {
+    history.back();
+  }
 }
 
 // ESC 키로 모달 닫기 기능 추가
@@ -1949,11 +2023,10 @@ document.getElementById('detail-modal').addEventListener('click', function(event
 
 // 제품 설명 부분에서 slash(/) 문자를 <br> 태그로 변경하는 함수 추가
 function formatDescription(description) {
-  // slash(/) 앞뒤 공백과 함께 <br> 태그로 변경
   return description.replace(/ \/ /g, '<br>');
 }
 
-// openDetailModal 함수 내에서 수정
+// openDetailModal 함수
 function openDetailModal(product) {
   const detailModal = document.getElementById('detail-modal');
   const detailInfo = document.getElementById('detail-info');
@@ -1963,7 +2036,6 @@ function openDetailModal(product) {
   
   // 추가 이미지가 있으면 배열에 추가
   if (product.additionalImages && product.additionalImages.length > 0) {
-    // 중복 이미지 제거 (메인 이미지가 추가 이미지에도 포함된 경우)
     product.additionalImages.forEach(img => {
       if (img !== product.image) {
         allImages.push(img);
@@ -2011,11 +2083,11 @@ function openDetailModal(product) {
     <div class="detail-title">${product.name}</div>
       ${descriptionSection}
     <div class="detail-specs">
-      <div class="detail-spec-item">
-        <span class="detail-spec-label">카테고리:</span> ${product.categories.filter(cat => 
-  cat !== "" && !['S01', 'S02', 'S03', 'S04', 'H01', 'H02', 'H03', 'B01', 'B02', 'B03', 'B04', 'B05', 'A01', 'A02', 'A03', 'A04', 'Top', 'Bottom', 'Shoes', 'RC', 'SG', 'E01'].includes(cat)
+     <div class="detail-spec-item">
+  <span class="detail-spec-label">카테고리:</span> ${product.categories.filter(cat => 
+cat !== "" && !['S01', 'S02', 'S03', 'S04', 'H01', 'H02', 'H03', 'B01', 'B02', 'B03', 'B04', 'B05', 'A01', 'A02', 'A03', 'A04', 'A05', 'Shoes', 'RC', 'SG', 'Top', 'Bottom', 'E01'].includes(cat)
 ).join(', ')}
-      </div>
+</div>
      ${materialInfo}
       <div class="detail-spec-item">
         <span class="detail-spec-label">가격:</span> ${product.price.toLocaleString()}원
@@ -2040,9 +2112,19 @@ function openDetailModal(product) {
   
   // 스크롤 방지
   document.body.style.overflow = 'hidden';
+  
+  // 브라우저 히스토리에 추가 (여기에 추가!)
+  history.pushState({ modal: true }, '');
 }
 
- 
+// 뒤로가기 감지 (마지막에 추가!)
+window.addEventListener('popstate', function(event) {
+  const detailModal = document.getElementById('detail-modal');
+  if (detailModal.style.display === 'flex') {
+    detailModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+});
 
   </script>
 </body>
