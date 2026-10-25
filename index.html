@@ -787,9 +787,6 @@
       transform: translateX(4px);
     }
   </style>
-
-
-  </style>
 </head>
 
 <body>
@@ -888,7 +885,7 @@
         <p><strong>주문 방법:</strong></p>
         <p>1. 원하시는 상품을 주문표에 추가<br>
         2. 주문표 복사 또는 엑셀 저장<br>
-        3. 카카오톡에 붙여넣기 또는 주문표 전송<br>
+        3. 카카오톡에 붙여넣기 또는 주문표 전송</p>
       </div>
     </div>
     
@@ -902,7 +899,8 @@
         <p>🎉 <strong>신상품이 입고되었습니다!</strong></p>
         추가 이미지는 순차적으로 업데이트 예정입니다.
       </div>
-      
+      </div>
+
     <!-- 공지사항 3 -->
     <div class="notice-item">
       <div class="notice-header">
@@ -1395,7 +1393,10 @@ card.appendChild(img);
         if (sizesArray.length > 0) {
           sizeSelect = document.createElement("select");
           sizeSelect.innerHTML = `<option value="">사이즈 선택</option>`;
-          sizesArray.forEach(size => {
+if (sizesArray.length > 1) {
+  sizeSelect.innerHTML += `<option value="__ALL__">★ 전체 사이즈</option>`;
+}
+sizesArray.forEach(size => {
             sizeSelect.innerHTML += `<option value="${size}">${size}</option>`;
           });
           dropdown.appendChild(sizeSelect);
@@ -1408,7 +1409,10 @@ card.appendChild(img);
         if (colorsArray.length > 0) {
           colorSelect = document.createElement("select");
           colorSelect.innerHTML = `<option value="">색상 선택</option>`;
-          colorsArray.forEach(color => {
+if (colorsArray.length > 1) {
+  colorSelect.innerHTML += `<option value="__ALL__">★ 전체 색상</option>`;
+}
+colorsArray.forEach(color => {
             colorSelect.innerHTML += `<option value="${color}">${color}</option>`;
           });
           dropdown.appendChild(colorSelect);
@@ -1499,9 +1503,16 @@ addToOrderBtn.onclick = () => {
     return;
   }
 
-  // 주문에 추가
-  mergeOrAddToOrder(product.name, selectedColor, selectedSize, qty);
-  
+  // 주문에 추가 (전체 선택 시 모든 조합을 한 번에 추가)
+  const sizeList = selectedSize === "__ALL__" ? sizesArray : [selectedSize];
+  const colorList = selectedColor === "__ALL__" ? colorsArray : [selectedColor];
+
+  sizeList.forEach(s => {
+    colorList.forEach(c => {
+      mergeOrAddToOrder(product.name, c, s, qty);
+    });
+  });
+
   // 주문 팝업이 열려있는 경우에만 열린 상태 유지
   const orderPopup = document.getElementById('order-popup');
   if (orderPopup.classList.contains("open")) {
@@ -1822,7 +1833,7 @@ function openDetailModal(product) {
     <div class="detail-specs">
       <div class="detail-spec-item">
         <span class="detail-spec-label">카테고리:</span> ${product.categories.filter(cat => 
-  cat !== "" && !['S01', 'S02', 'S03', 'S04', 'H01', 'H02', 'H03', 'B01', 'B02', 'B03', 'B04', 'B05', 'A01', 'A02', 'A03', 'A04', 'Top', 'Bottom', 'Shoes', 'RC', 'SG', 'E01'].includes(cat)
+  cat !== "" && !['S01', 'S02', 'S03', 'S04', 'H01', 'H02', 'H03', 'H04', 'B01', 'B02', 'B03', 'B04', 'B05', 'A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'Shoes', 'RC', 'SG', 'Top', 'Bottom', 'E01'].includes(cat)
 ).join(', ')}
       </div>
      ${materialInfo}
@@ -1932,96 +1943,6 @@ function formatDescription(description) {
   return description.replace(/ \/ /g, '<br>');
 }
 
-// openDetailModal 함수
-function openDetailModal(product) {
-  const detailModal = document.getElementById('detail-modal');
-  const detailInfo = document.getElementById('detail-info');
-  
-  // 모든 이미지 배열 생성 (메인 이미지와 추가 이미지)
-  const allImages = [product.image];
-  
-  // 추가 이미지가 있으면 배열에 추가
-  if (product.additionalImages && product.additionalImages.length > 0) {
-    product.additionalImages.forEach(img => {
-      if (img !== product.image) {
-        allImages.push(img);
-      }
-    });
-  } 
-
-  // 상세 정보 구성 - 이미지 갤러리 추가
-  let thumbnailsHTML = '';
-  allImages.forEach((img, index) => {
-    thumbnailsHTML += `
-      <img src="${img}" class="thumbnail ${index === 0 ? 'active' : ''}" 
-        alt="썸네일 ${index + 1}" onclick="changeDetailImage(${index})">
-    `;
-  });
-  
-  // 소재 정보와 설명을 상세하게 표시
-  const materialInfo = product.material ? 
-    `<div class="detail-spec-item" style="grid-column: span 1;">
-      <span class="detail-spec-label">소재:</span> ${product.material}
-    </div>` : '';
-  
-  // 설명 텍스트에 줄바꿈 적용
-  const formattedDescription = formatDescription(product.description);
-  
-  const descriptionSection = product.description ? 
-    `<div class="detail-description" style="margin: 15px 0; padding: 10px; background-color: #f9f9f9; border-radius: 8px; line-height: 1.6;">
-      ${formattedDescription}
-    </div>` : '';
-  
-  detailInfo.innerHTML = `
-    <div class="detail-gallery">
-      <div class="main-image-container">
-        <img src="${allImages[0]}" class="main-image" id="detail-main-image" alt="${product.name}">
-      </div>
-      <div class="gallery-nav">
-        <button class="gallery-prev" onclick="prevDetailImage()" disabled>&lt;</button>
-        <span class="image-counter" id="image-counter">1 / ${allImages.length}</span>
-        <button class="gallery-next" onclick="nextDetailImage()" ${allImages.length <= 1 ? 'disabled' : ''}>&gt;</button>
-      </div>
-      <div class="thumbnail-container" id="thumbnail-container">
-        ${thumbnailsHTML}
-      </div>
-    </div>
-    <div class="detail-title">${product.name}</div>
-      ${descriptionSection}
-    <div class="detail-specs">
-     <div class="detail-spec-item">
-  <span class="detail-spec-label">카테고리:</span> ${product.categories.filter(cat => 
-cat !== "" && !['S01', 'S02', 'S03', 'S04', 'H01', 'H02', 'H03', 'B01', 'B02', 'B03', 'B04', 'B05', 'A01', 'A02', 'A03', 'A04', 'A05', 'Shoes', 'RC', 'SG', 'Top', 'Bottom', 'E01'].includes(cat)
-).join(', ')}
-</div>
-     ${materialInfo}
-      <div class="detail-spec-item">
-        <span class="detail-spec-label">가격:</span> ${product.price.toLocaleString()}원
-      </div>
-      <div class="detail-spec-item">
-        <span class="detail-spec-label">사이즈:</span> ${product.sizes}
-      </div>
-      <div class="detail-spec-item" style="grid-column: span 2;">
-        <span class="detail-spec-label">색상:</span> ${product.colors}
-      </div>
-
-      ${product.soldOut ? '<div class="detail-spec-item" style="color: red; grid-column: span 2; text-align: center; font-weight: bold;">품절 상품</div>' : ''}
-    </div>
-  `;
-  
-  // 전역 변수로 현재 이미지 인덱스와 전체 이미지 배열 저장
-  window.currentImageIndex = 0;
-  window.detailImages = allImages;
-  
-  // 모달 표시
-  detailModal.style.display = 'flex';
-  
-  // 스크롤 방지
-  document.body.style.overflow = 'hidden';
-  
-  // 브라우저 히스토리에 추가 (여기에 추가!)
-  history.pushState({ modal: true }, '');
-}
 
 // 뒤로가기 감지 (마지막에 추가!)
 window.addEventListener('popstate', function(event) {
