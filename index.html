@@ -1663,17 +1663,24 @@ addToOrderBtn.onclick = () => {
 
 // 기존 togglePopup 함수를 수정
 function togglePopup(openPopupId, closePopupId) {
-  const openPopup = document.getElementById(openPopupId);
-  const closePopup = document.getElementById(closePopupId);
+  const openEl = document.getElementById(openPopupId);
+  const closeEl = document.getElementById(closePopupId);
 
-  if (closePopup.classList.contains("open")) {
-    closePopup.classList.remove("open");
+  closeEl.classList.remove("open");
+  openEl.classList.toggle("open");
+
+  if (openEl.classList.contains("open")) {
+    // 팝업이 열렸을 때: 히스토리에 기록 (이미 기록돼 있으면 중복 추가 안 함)
+    if (!(history.state && history.state.popup)) {
+      history.pushState({ popup: true }, '');
+    }
+  } else {
+    // 버튼으로 팝업을 닫았을 때: 기록 제거
+    if (history.state && history.state.popup) {
+      history.back();
+    }
   }
-
-  // 토글 대신 상태를 체크해서 필요한 경우에만 열기
-  openPopup.classList.toggle("open");
 }
-
 // 새로운 함수: 팝업이 이미 열려있는지 확인
 function isPopupOpen(popupId) {
   const popup = document.getElementById(popupId);
@@ -1947,10 +1954,17 @@ function formatDescription(description) {
 // 뒤로가기 감지 (마지막에 추가!)
 window.addEventListener('popstate', function(event) {
   const detailModal = document.getElementById('detail-modal');
+
+  // 1순위: 상세페이지가 열려 있으면 그것만 닫기
   if (detailModal.style.display === 'flex') {
     detailModal.style.display = 'none';
     document.body.style.overflow = 'auto';
+    return;
   }
+
+  // 2순위: 공지/주문 팝업이 열려 있으면 닫기
+  document.getElementById('notice-popup').classList.remove('open');
+  document.getElementById('order-popup').classList.remove('open');
 });
 
   </script>
